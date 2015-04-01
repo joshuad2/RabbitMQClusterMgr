@@ -12,10 +12,13 @@ This project builds multiple virtual RabbitMQ clusters in an internal database t
 <ul>
 <li>BOSH release</li>
 <li>Docker Compose</li>
+<li>Docker Image(s)</li>
+<li>Stackato PCF role</li>
 <li>Bare Metal (create the RabbitMQ config files)</li>
 <li>Puppet (later)</li>
 <li>Chef (later)</li>
 <li>Ansible (later)</li>
+<li>Salt (later></li></li>
 </ul>
 <div>
 The purpose of the RabbitMQClusterMgr service is that once the project is provisioned, it will continually collect heuristic information about the cluster. &nbsp;This would be things like&nbsp;</div>

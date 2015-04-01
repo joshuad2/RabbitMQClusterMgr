@@ -2,7 +2,11 @@ package com.rmqclustermgr.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+/**
+ * Controller
+ * @author joshuadavis
+ *
+ */
 @RestController
 @RequestMapping("/main")
 public class MainController {
