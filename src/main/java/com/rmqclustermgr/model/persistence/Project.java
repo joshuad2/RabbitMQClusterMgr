@@ -1,73 +1,59 @@
 package com.rmqclustermgr.model.persistence;
 
-import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.gemfire.mapping.Region;
 
 
-@Entity
-@Table(name="PROJECT")
-public class Project implements Serializable{
+@Region("Project")
+public class Project implements ModelGenericIfc<ProjectKey>{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7047032196521384883L;
-	
-	@Column(name="PROJECT_ID")
+
 	@Id
-    @GeneratedValue()
-    private Long id;
-	/**
-	 * Name of the project
-	 */
-	@Column(name="NAME", nullable=false,unique=true,length=100)
-	private String name;
+	private ProjectKey key;
+
 	/**
 	 * Description of the project
 	 */
-	@Column(name="DESC",nullable=true,unique=false,length=200)
 	private String description;
 	/**
 	 * Name of the creator of the project
 	 */
-	@Column(name="CREATOR_NAME",nullable=false,unique=false,length=200)
 	private String creatorName;
 	
-	@Column(name="ANALYSIS_TYPE",nullable=false,unique=false,length=20)
 	private String analysisType;
 	
-	@OneToMany(targetEntity=Cluster.class)
-	@JoinColumn(name="CLUSTER_ID")
-	private List<Cluster> rabbitMQClusters;
+	private List<ClusterKey> rabbitMQClusters;
 	
-	@Column(name="DEPLOY_TO_CLOUD_FOUNDRY_SERVICE", nullable=false)
 	private Boolean deployToCloudFoundryService;
 	  
-	@Column(name="DEPLOY_TO_CLOUD_FOUNDRY_BOSH",nullable=false)
 	private Boolean deployToCloudFoundryBosh;
-	
-	@Column(name="DEPLOY_TO_DOCKER",nullable=false)
 	private Boolean deployToDocker;
 
+	
+	public Project(String projectName){
+		ProjectKey projectKey=new ProjectKey();
+		projectKey.setProjectName(projectName);
+		this.key=projectKey;
+	}
+	
+	
 	/**
 	 * @return the name
 	 */
 	public String getName() {
-		return name;
+		return this.getKey().getProjectName();
 	}
 	/**
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
-		this.name = name;
+		this.getKey().setProjectName(name);
 	}
 	/**
 	 * @return the description
@@ -108,15 +94,13 @@ public class Project implements Serializable{
 	/**
 	 * @return the rabbitMQClusterNames
 	 */
-	public List<Cluster> getRabbitMQClusters() {
+	public List<ClusterKey> getRabbitMQClusters() {
 		return rabbitMQClusters;
 	}
-	/**
-	 * @param rabbitMQClusterNames the rabbitMQClusterNames to set
-	 */
+
 	public void setRabbitMQClusters(
-			List<Cluster> rabbitMQClusterNames) {
-		this.rabbitMQClusters = rabbitMQClusterNames;
+			List<ClusterKey> rabbitMQClusters) {
+		this.rabbitMQClusters = rabbitMQClusters;
 	}
 	/**
 	 * @return the deployToCloudFoundryService
@@ -154,46 +138,13 @@ public class Project implements Serializable{
 	public void setDeployToDocker(Boolean deployToDocker) {
 		this.deployToDocker = deployToDocker;
 	}
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
+	
+	public void setKey(ProjectKey key) {
+		this.key = key;
 	}
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
+	
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+	public ProjectKey getKey() {
+      return this.getKey();
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Project other = (Project) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
-	}
-
 }

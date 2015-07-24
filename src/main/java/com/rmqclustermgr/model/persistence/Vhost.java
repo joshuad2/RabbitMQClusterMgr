@@ -2,64 +2,42 @@ package com.rmqclustermgr.model.persistence;
 
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.gemfire.mapping.Region;
 
-@Entity
-@Table(name="RABBITMQ_VHOST")
+@Region("rabbitmqVhost")
 public class Vhost implements java.io.Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6651784173613390046L;
-
-	@Column(name="VHOST_ID",nullable=false)
 	@Id
-    @GeneratedValue
-    private Long id;
-	
-	@Column(name="VHOST_NAME",nullable=false)
-	private String name;
-
-	@OneToMany(targetEntity=User.class)
+	private VhostKey key;
 	private List<User> users;
-
-	@OneToMany(targetEntity=Queue.class)
 	private List <Queue> queues;
-
-	@OneToMany(targetEntity=Exchange.class)
 	private List <Exchange> exchanges;
+
+
+	public Vhost(String vHostName, ClusterKey cluster, NodeKey node){
+		VhostKey vhostKey=new VhostKey();
+		vhostKey.setCluster(cluster);
+		vhostKey.setNode(node);
+		vhostKey.setvHostName(vHostName);
+		this.key=vhostKey;
+	}
 	
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	/**
 	 * @return the name
 	 */
 	public String getName() {
-		return name;
+		return this.getKey().getvHostName();
 	}
 
 	/**
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
-		this.name = name;
+		this.getKey().setvHostName(name);
 	}
 
 	/**
@@ -103,6 +81,13 @@ public class Vhost implements java.io.Serializable{
 	public void setExchanges(List<Exchange> exchanges) {
 		this.exchanges = exchanges;
 	}
+
 	
-	
+	public VhostKey getKey() {
+		return key;
+	}
+
+	public void setKey(VhostKey key) {
+		this.key = key;
+	}
 }

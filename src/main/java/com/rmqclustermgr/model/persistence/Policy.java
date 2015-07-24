@@ -2,14 +2,10 @@ package com.rmqclustermgr.model.persistence;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-@Entity
-@Table(name="RABBIT_MQ_POLICY")
+import org.springframework.data.annotation.Id;
+import org.springframework.data.gemfire.mapping.Region;
+
+@Region("rabbitmqPolicy")
 public class Policy implements Serializable {
 
 	/**
@@ -17,39 +13,33 @@ public class Policy implements Serializable {
 	 */
 	private static final long serialVersionUID = 6083185594565625891L;
 
-	@Column(name="POLICY_ID")
 	@Id
-    @GeneratedValue()
-    private Long id;
-	@Column(name="NAME", nullable=false,unique=false)
-	private String name;
-	@Column(name="PRIORITY")
+	private PolicyKey key;
 	private int priority;
-	@Column(name="SELECTION")
 	private String selection;
-	@Column(name="FEDERATION_UPSTREAM_SET")
 	private String federationUpsteamSet;
-	@Column(name="HA_MODE")
 	private String haMode;
-	@Column(name="APPLY_TO")
 	private String applyTo;//can be queues exchange or all
 	
-	@ManyToOne(optional=false)
-	private User owner;
+	public Policy(String policyName, UserKey owner, VhostKey vHost){
+		PolicyKey policyKey=new PolicyKey();
+		policyKey.setOwner(owner);
+		policyKey.setPolicyName(policyName);
+		policyKey.setvHost(vHost);
+		this.key=policyKey;
+	}
 	
-	@ManyToOne(optional=false)
-	private Vhost vHost;
 	/**
 	 * @return the name
 	 */
 	public String getName() {
-		return name;
+		return this.getKey().getPolicyName();
 	}
 	/**
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
-		this.name = name;
+	  this.getKey().setPolicyName(name);
 	}
 	/**
 	 * @return the priority
@@ -111,34 +101,11 @@ public class Policy implements Serializable {
 	public void setApplyTo(String applyTo) {
 		this.applyTo = applyTo;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+	public PolicyKey getKey() {
+		return key;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Policy other = (Policy) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+	public void setKey(PolicyKey key) {
+		this.key = key;
 	}
 
 }

@@ -1,60 +1,37 @@
 package com.rmqclustermgr.model.persistence;
 
-import java.io.Serializable;
+import org.springframework.data.annotation.Id;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-@Entity
-@Table(name="RABBITMQ_FEDERATION_UPSTREAM")
-public class FederationUpstream implements Serializable{
+public class FederationUpstream implements ModelGenericIfc<FederationUpstreamKey>{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -986624206114764771L;
-	@Column(name="FEDERATION_UPSTREAM_ID")
+
 	@Id
-    @GeneratedValue
-    private Long id;
-	
-	@Column(name="FEDERATION_UPSTREAM_NAME",length=100)
-	private String federationUpStreamName;
-	@Column(name="FEDERATION_URI",length=100)
+	private FederationUpstreamKey key;
 	private String federationURI;
-	@Column(name="FEDERATION_EXPIRATION")
 	private Long federationExpiration;
-	
-	@ManyToOne(optional=false)
-	private User owner;
-	
-	@ManyToOne(optional=false)
-	private Vhost vHost;
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
+
+	public FederationUpstream(String federationUpStreamName,ClusterKey cluster, UserKey owner, VhostKey vHost){
+		FederationUpstreamKey fukey=new FederationUpstreamKey();
+		fukey.setCluster(cluster);
+		fukey.setFederationUpStreamName(federationUpStreamName);
+		fukey.setOwner(owner);
+		fukey.setvHost(vHost);
+		this.key=fukey;
 	}
 	/**
 	 * @return the federationUpStreamName
 	 */
 	public String getFederationUpStreamName() {
-		return federationUpStreamName;
+		return key.getFederationUpStreamName();
 	}
 	/**
 	 * @param federationUpStreamName the federationUpStreamName to set
 	 */
 	public void setFederationUpStreamName(String federationUpStreamName) {
-		this.federationUpStreamName = federationUpStreamName;
+		this.setFederationUpStreamName(federationUpStreamName);
 	}
 	/**
 	 * @return the federationURI
@@ -80,36 +57,26 @@ public class FederationUpstream implements Serializable{
 	public void setFederationExpiration(Long federationExpiration) {
 		this.federationExpiration = federationExpiration;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime
-				* result
-				+ ((federationUpStreamName == null) ? 0
-						: federationUpStreamName.hashCode());
-		return result;
+	public FederationUpstreamKey getKey() {
+		return this.getKey();
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		FederationUpstream other = (FederationUpstream) obj;
-		if (federationUpStreamName == null) {
-			if (other.federationUpStreamName != null)
-				return false;
-		} else if (!federationUpStreamName.equals(other.federationUpStreamName))
-			return false;
-		return true;
+	public ClusterKey getCluster() {
+		return key.getCluster();
+	}
+	public void setCluster(ClusterKey cluster) {
+		key.setCluster(cluster);
+	}
+	public UserKey getOwner() {
+		return key.getOwner();
+	}
+	public void setOwner(UserKey owner) {
+		key.setOwner(owner);
+	}
+	public VhostKey getvHost() {
+		return key.getvHost();
+	}
+	public void setvHost(VhostKey vHost) {
+		key.setvHost(vHost);
 	}
 }

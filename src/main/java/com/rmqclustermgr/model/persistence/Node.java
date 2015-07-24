@@ -3,97 +3,67 @@
  */
 package com.rmqclustermgr.model.persistence;
 
-import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.gemfire.mapping.Region;
 
 
 /**
- * @author jdavis
+ * @author Joshua Davis
  *
  */
-@Entity
-@Table(name="RABBITMQ_NODE")
-public class Node implements Serializable {
+@Region("rabbitmqNode")
+public class Node implements ModelGenericIfc<NodeKey> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4119364448466626948L;
 
-	@Column(name="NODE_ID")
 	@Id
-    @GeneratedValue
-    private Long id;
-	@Column(nullable=false,unique=false,name="NAME")
-	private String name;
-	@Column(nullable=false,unique=false,name="RABBITMQ_VERSION")
+	private NodeKey key;
 	private String rabbitMQVersion;
-	@Column(nullable=false,unique=false,name="RABBITMQ_NODE_TYPE")
 	private String rabbitMQNodeType;//File or Memory
-	@Column(nullable=false,unique=false,name="MEMORY_HIGH_WATERMARK")
 	private float memoryHighWaterMark;
-	@Column(nullable=false,unique=false,name="HIGH_WATERMARK_PAGING_RATIO")
 	private float highWatermarkPagingRatio;
-	@Column(nullable=false,unique=false,name="DISK_FREE_LIMIT")
 	private Long diskFreeLimit;
-	@Column(nullable=false,unique=false,name="MEM_RELATIVE")
 	private float memRelative;
-	@Column(nullable=false,unique=false,name="SYSTEM_MEMORY")
 	private Long systemMemory;
-	@Column(nullable=false,unique=false,name="IP_ADDRESS")
 	private String ipAddress;
-	@Column(nullable=false,unique=false,name="PORT")
 	private Integer port;
-	@Column(nullable=false,unique=false,name="TCP_LISTENERS")
 	private String tcpListeners;
-	@Column(nullable=false,unique=false,name="HANDSHAKE_TIMEOUT")
 	private Long handshakeTimeout;
-	@Column(nullable=false,unique=false,name="LOG_LEVELS")
 	private Long logLevels;
-	@Column(nullable=false,unique=false,name="FRAME_MAX")
 	private Long frameMax;
-	@Column(nullable=false,unique=false,name="CHANNEL_MAX")
 	private Long channelMax;
-	@Column(nullable=false,unique=false,name="HEARTBEAT")
 	private Integer heartbeat;
-	@Column(nullable=false,unique=false,name="DEFAULT_VHOST")
 	private String defaultVhost;
-	@Column(nullable=false,unique=false,name="DEFAULT_USER")
 	private String defaultUser;
-	@Column(nullable=false,unique=false,name="DEFAULT_PASS")
 	private String defaultPass;
-	@Column(nullable=false,unique=false,name="DEFAULT_USER_TAGS")
 	private String defaultUserTags;
-	@Column(nullable=false,unique=false,name="DEFAULT_PERMISSIONS")
 	private String defaultPermissions;
-	@Column(nullable=false,unique=false,name="COLLECT_STATISTICS")
 	private String collectStatistics;
-	@Column(nullable=false,unique=false,name="COLLECT_STATISTICS_INTERVAL")
 	private Long collectStatisticsInterval;
 	
-	@ManyToOne(optional=false)
-	private User owner;
+	public Node(String nodeName, ClusterKey cluster, VhostKey vhost ){
+		NodeKey nodeKey=new NodeKey();
+		nodeKey.setCluster(cluster);
+		nodeKey.setNodeName(nodeName);
+		nodeKey.setVhost(vhost);
+		this.key=nodeKey;
+	}
 	
-	@ManyToOne(optional=false)
-	private Vhost vHost;
-	
+	private UserKey owner;
 	/**
 	 * @return the name
 	 */
 	public String getName() {
-		return name;
+		return this.key.getNodeName();
 	}
 	/**
 	 * @param name the name to set
 	 */
 	public void setName(String name) {
-		this.name = name;
+		this.getKey().setNodeName(name);;
 	}
 	/**
 	 * @return the rabbitMQVersion
@@ -362,34 +332,36 @@ public class Node implements Serializable {
 	public void setCollectStatisticsInterval(Long collectStatisticsInterval) {
 		this.collectStatisticsInterval = collectStatisticsInterval;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+	public NodeKey getKey() {
+       return this.key;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Node other = (Node) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+	public UserKey getOwner() {
+		return owner;
+	}
+	public void setOwner(UserKey owner) {
+		this.owner = owner;
+	}
+	public void setKey(NodeKey key) {
+		this.key = key;
+	}
+	public String getNodeName() {
+		return key.getNodeName();
+	}
+	public void setNodeName(String nodeName) {
+		key.setNodeName(nodeName);
+	}
+	public ClusterKey getCluster() {
+		return key.getCluster();
+	}
+	public void setCluster(ClusterKey cluster) {
+		key.setCluster(cluster);
+	}
+	public VhostKey getVhost() {
+		return key.getVhost();
+	}
+	public void setVhost(VhostKey vhost) {
+		key.setVhost(vhost);
 	}
 
 }

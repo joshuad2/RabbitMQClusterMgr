@@ -1,74 +1,58 @@
 package com.rmqclustermgr.model.persistence;
 
-import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-@Entity
-@Table(name="RABBITMQ_CLUSTER")
-public class Cluster implements Serializable {
+import org.springframework.data.annotation.Id;
+import org.springframework.data.gemfire.mapping.Region;
+@Region("rabbitmqCluster")
+public class Cluster implements ModelGenericIfc<ClusterKey> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7408951142309246977L;
+	
+	private ProjectKey project;
 	@Id
-	@Column(name="CLUSTER_ID")
-    @GeneratedValue
-    private Long id;
-	
-	@ManyToOne(optional=false)
-	@JoinColumn(name="PROJECT_ID")
-	private Project project;
-	
-	@Column(name="NAME",nullable=false, unique=true, length=100)
-	private String name;
-	
-	@Column(name="DESC",nullable=true,unique=false,length=200)
+	private ClusterKey clusterKey;
 	private String description;
-	
-	@OneToOne(optional=false)
-	@JoinColumn(name="CLUSTER_TYPE_ID")
 	private ClusterType clusterType;
-	
-	@Column(name="NET_TICK_TIME",nullable=true, unique=false)
 	private Long netTickTime;
-	
-	@OneToMany(targetEntity=FederationUpstream.class)
 	private List <FederationUpstream> federationUpstreams;
-	
-	@OneToMany(targetEntity=Policy.class)
 	private List <Policy> policies;
-
-	@ManyToOne(optional=false)
-	private User owner;
-	
-	@ManyToOne(optional=false)
+	private UserKey owner;
+	private List <UserKey> users;
 	private Vhost vHost;
-	/**
-	 * Virtual hosts for the cluster
-	 */
-	@OneToMany(targetEntity=Vhost.class)
 	private List<Vhost> vhosts;
+	private List<NodeKey> nodes;
+	
+	public Cluster(String clusterName){
+		ClusterKey clusterKey=new ClusterKey();
+		clusterKey.setClusterName(clusterName);
+		this.clusterKey=clusterKey;
+	}
+	
+	/**
+	 * 
+	 * @return the users
+	 */
+	public List<UserKey> getUsers() {
+		return users;
+	}
+	public void setUsers(List<UserKey> users) {
+		this.users = users;
+	}
 	/**
 	 * @return the name
 	 */
-	public String getName() {
-		return name;
+	public String getClusterName() {
+		return this.getClusterKey().getClusterName();
 	}
 	/**
 	 * @param name the name to set
 	 */
-	public void setName(String name) {
-		this.name = name;
+	public void setClusterName(String name) {
+		this.getClusterKey().setClusterName(name);
 	}
 	/**
 	 * @return the description
@@ -95,18 +79,6 @@ public class Cluster implements Serializable {
 		this.clusterType = clusterType;
 	}
 	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
-	/**
 	 * @return the netTickTime
 	 */
 	public Long getNetTickTime() {
@@ -118,34 +90,29 @@ public class Cluster implements Serializable {
 	public void setNetTickTime(Long netTickTime) {
 		this.netTickTime = netTickTime;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		return result;
+	public ClusterKey getClusterKey() {
+		return clusterKey;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Cluster other = (Cluster) obj;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
-		return true;
+	public void setClusterKey(ClusterKey clusterKey) {
+		this.clusterKey = clusterKey;
+	}
+	public UserKey getOwner() {
+		return owner;
+	}
+	public void setOwner(UserKey owner) {
+		this.owner = owner;
+	}
+	public Vhost getvHost() {
+		return vHost;
+	}
+	public void setvHost(Vhost vHost) {
+		this.vHost = vHost;
+	}
+	public List<Vhost> getVhosts() {
+		return vhosts;
+	}
+	public void setVhosts(List<Vhost> vhosts) {
+		this.vhosts = vhosts;
 	}
 	/**
 	 * @return the federationUpstreams
@@ -170,6 +137,22 @@ public class Cluster implements Serializable {
 	 */
 	public void setPolicies(List<Policy> policies) {
 		this.policies = policies;
+	}
+	@Override
+	public ClusterKey getKey() {
+       return this.clusterKey;
+	}
+	public ProjectKey getProject() {
+		return project;
+	}
+	public void setProject(ProjectKey project) {
+		this.project = project;
+	}
+	public List<NodeKey> getNodes() {
+		return nodes;
+	}
+	public void setNodes(List<NodeKey> nodes) {
+		this.nodes = nodes;
 	}
 
 }

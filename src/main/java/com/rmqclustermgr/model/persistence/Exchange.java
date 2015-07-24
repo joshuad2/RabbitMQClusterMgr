@@ -1,75 +1,45 @@
-/**
- * 
- */
 package com.rmqclustermgr.model.persistence;
 
-import java.io.Serializable;
 import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.gemfire.mapping.Region;
 
 /**
- * @author jdavis
+ * @author Joshua Davis
  *
  */
-@Entity
-@Table(name="RABBITMQ_EXCHANGE")
-public class Exchange implements Serializable {
+@Region("RabbitmqExchange")
+public class Exchange implements ModelGenericIfc<ExchangeKey> {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 7919296801558044464L;
-	@Column(name="EXCHANGE_ID")
 	@Id
-    @GeneratedValue
-    private Long id;
-	
-	@Column(name="EXCHANGE_NAME",nullable=false,length=100,unique=false)
-    private String exchangeName;
-	@Column(name="EXCHANGE_TYPE",nullable=false,length=100,unique=false)
+    private ExchangeKey key;
     private String exchangeType;//direct, flow, topic
-	@Column(name="IS_FEDERATED",nullable=false)
     private Boolean isFederated;
-	@Column(name="IS_LOCAL",nullable=false)
 	private Boolean isLocalExchange;
-	@OneToMany(targetEntity=QueueBinding.class,mappedBy="id")
     private List <QueueBinding> bindings;
+	private UserKey owner;
 	
-	@ManyToOne(optional=false)
-	private User owner;
+	public Exchange(String exchangeName,NodeKey node,VhostKey virtualHost){
+		ExchangeKey exchangeKey=new ExchangeKey();
+		exchangeKey.setExchangeName(exchangeName);
+		exchangeKey.setNode(node);
+		exchangeKey.setVirtualHost(virtualHost);
+		this.key=exchangeKey;
+	}
 	
-	@ManyToOne(optional=false)
-	private Vhost vHost;
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
-	/**
-	 * @param id the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
-	/**
-	 * @return the exchangeName
-	 */
 	public String getExchangeName() {
-		return exchangeName;
+		return key.getExchangeName();
 	}
 	/**
 	 * @param exchangeName the exchangeName to set
 	 */
 	public void setExchangeName(String exchangeName) {
-		this.exchangeName = exchangeName;
+		this.getKey().setExchangeName(exchangeName);
 	}
 	/**
 	 * @return the exchangeType
@@ -107,35 +77,40 @@ public class Exchange implements Serializable {
 	public void setBindings(List<QueueBinding> bindings) {
 		this.bindings = bindings;
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((exchangeName == null) ? 0 : exchangeName.hashCode());
-		return result;
+	public ExchangeKey getKey() {
+		return this.getKey();
 	}
-	/* (non-Javadoc)
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Exchange other = (Exchange) obj;
-		if (exchangeName == null) {
-			if (other.exchangeName != null)
-				return false;
-		} else if (!exchangeName.equals(other.exchangeName))
-			return false;
-		return true;
+	public Boolean getIsLocalExchange() {
+		return isLocalExchange;
+	}
+	public void setIsLocalExchange(Boolean isLocalExchange) {
+		this.isLocalExchange = isLocalExchange;
+	}
+	public UserKey getOwner() {
+		return owner;
+	}
+	public void setOwner(UserKey owner) {
+		this.owner = owner;
+	}
+	public void setKey(ExchangeKey key) {
+		this.key = key;
+	}
+
+	public NodeKey getNode() {
+		return key.getNode();
+	}
+
+	public void setNode(NodeKey node) {
+		key.setNode(node);
+	}
+
+	public VhostKey getVirtualHost() {
+		return key.getVirtualHost();
+	}
+
+	public void setVirtualHost(VhostKey virtualHost) {
+		key.setVirtualHost(virtualHost);
 	}
 	
 }
