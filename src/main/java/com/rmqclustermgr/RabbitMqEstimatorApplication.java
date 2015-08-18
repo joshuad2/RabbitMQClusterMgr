@@ -14,7 +14,7 @@ import org.springframework.data.gemfire.repository.config.EnableGemfireRepositor
 @Configuration
 @ImportResource(value="spring-config.xml")
 @EnableGemfireRepositories
-@ComponentScan
+@ComponentScan(basePackages = {"com.rmqclustermgr"})
 @EnableAutoConfiguration
 public class RabbitMqEstimatorApplication {
 

@@ -92,29 +92,4 @@ eclipse {
 task wrapper(type: Wrapper) {
     gradleVersion = '1.12'
 }
-task writeNewPom << {
-    pom {
-        project {
-            inceptionYear '2015'
-            licenses {
-                license {
-                    name 'The Apache Software License, Version 2.0'
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    distribution 'repo'
-                }
-            }
-            repositories {
-              repository {
-                  name 'gemfire'
-                  id 'gemfire'
-                  url 'http://dist.gemstone.com/maven/release'
-              }
-              repository {
-                  name 'spring'
-                  id 'spring'
-                  url 'http://repo.springsource.org/libs-RELEASE/'
-              }
-            }
-        }
-    }.writeTo("pom.xml")
 }
