@@ -51,6 +51,7 @@ public class TestExample {
         mgmt.queues().delete("test.example.queue2");
     }
 
+    @Ignore
     @Test
     public void test_topology_state_and_make_other_assertions(){
 

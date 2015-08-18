@@ -64,25 +64,22 @@ repositories {
         url "http://dist.gemstone.com/maven/release"
       }
    maven {
-        url "http://repo.springsource.org/libs-release/"
+        url "http://repo.springsource.org/libs.RELEASE/"
         }
     }
 dependencies {
 	compile 'org.springframework.hateoas:spring-hateoas:0.17.0.RELEASE'
 	compile 'org.springframework.data:spring-data-gemfire:1.6.1.RELEASE'
-    compile("org.springframework.boot:spring-boot-starter-web")
-    compile("org.springframework.boot:spring-boot-starter-amqp")
-    compile("org.springframework.boot:spring-boot-starter-ws")
-    compile("org.springframework.boot:spring-boot-starter-groovy-templates")
-    compile("org.springframework.boot:spring-boot-starter-data-rest")
-    compile("org.springframework.boot:spring-boot-starter-websocket")
-    compile("org.springframework.boot:spring-boot-starter-actuator")
-    compile("org.springframework.data:spring-data-rest-webmvc")
+    compile("org.springframework.boot:spring-boot-starter-web:1.2.5.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-amqp:1.2.5.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-ws:1.2.5.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-groovy-templates:1.2.5.RELEASE")
+    compile("org.springframework.data:spring-data-rest-webmvc:2.2.3.RELEASE")
     compile("com.google.code.gson:gson:2.3.1");
     compile("com.sun.jersey:jersey-client:1.9.1");
     compile("commons-codec:commons-codec:1.10")
     compile("com.gemstone.gemfire:gemfire:8.1.0")
-    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompile("org.springframework.boot:spring-boot-starter-test:1.2.5.RELEASE")
 }
 
 eclipse {
@@ -105,6 +102,18 @@ task writeNewPom << {
                     url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
                     distribution 'repo'
                 }
+            }
+            repositories {
+              repository {
+                  name 'gemfire'
+                  id 'gemfire'
+                  url 'http://dist.gemstone.com/maven/release'
+              }
+              repository {
+                  name 'spring'
+                  id 'spring'
+                  url 'http://repo.springsource.org/libs-RELEASE/'
+              }
             }
         }
     }.writeTo("pom.xml")
