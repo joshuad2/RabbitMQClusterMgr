@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.gemfire.mapping.Region;
-@Region("rabbitmqQueueBinding")
+@Region("queueBinding")
 public class QueueBinding implements Serializable {
 
 	/**

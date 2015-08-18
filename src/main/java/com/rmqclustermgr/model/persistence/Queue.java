@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.gemfire.mapping.Region;
-@Region("rabbitmqQueue")
+@Region("queue")
 public class Queue implements ModelGenericIfc<QueueKey> {
 
 	/**

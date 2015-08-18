@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.gemfire.mapping.Region;
 
-@Region("rabbitmqVhost")
+@Region("vhost")
 public class Vhost implements java.io.Serializable{
 	/**
 	 * 

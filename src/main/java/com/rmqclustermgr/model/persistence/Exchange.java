@@ -9,7 +9,7 @@ import org.springframework.data.gemfire.mapping.Region;
  * @author Joshua Davis
  *
  */
-@Region("RabbitmqExchange")
+@Region("exchange")
 public class Exchange implements ModelGenericIfc<ExchangeKey> {
 
 	/**

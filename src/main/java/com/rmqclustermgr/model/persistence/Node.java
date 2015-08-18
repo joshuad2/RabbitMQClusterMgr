@@ -11,7 +11,7 @@ import org.springframework.data.gemfire.mapping.Region;
  * @author Joshua Davis
  *
  */
-@Region("rabbitmqNode")
+@Region("node")
 public class Node implements ModelGenericIfc<NodeKey> {
 
 	/**

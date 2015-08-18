@@ -6,7 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.gemfire.mapping.Region;
 
 
-@Region("Project")
+@Region("project")
 public class Project implements ModelGenericIfc<ProjectKey>{
 
 	/**

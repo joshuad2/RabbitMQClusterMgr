@@ -1,7 +1,9 @@
 package com.rmqclustermgr.model.persistence;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.gemfire.mapping.Region;
 
+@Region("federationUpstream")
 public class FederationUpstream implements ModelGenericIfc<FederationUpstreamKey>{
 	/**
 	 * 

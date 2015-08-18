@@ -3,18 +3,25 @@ package com.rmqclustermgr;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
+import org.springframework.context.annotation.ImportResource;
+import org.springframework.data.gemfire.CacheFactoryBean;
+import org.springframework.data.gemfire.repository.config.EnableGemfireRepositories;
+
 
 @Configuration
-@EnableJpaRepositories
-@Import(RepositoryRestMvcConfiguration.class)
+@ImportResource(value="spring-config.xml")
+@EnableGemfireRepositories
 @ComponentScan
 @EnableAutoConfiguration
 public class RabbitMqEstimatorApplication {
+
+    @Bean
+    CacheFactoryBean cacheFactoryBean() {
+        return new CacheFactoryBean();
+    }
 
     public static void main(String[] args) {
     	SpringApplication app=new SpringApplication(RabbitMqEstimatorApplication.class);

@@ -6,7 +6,23 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/gemfire http://www.springframework.org/schema/gemfire/spring-gemfire-1.5.xsd
 		http://www.springframework.org/schema/data/gemfire http://www.springframework.org/schema/data/gemfire/spring-data-gemfire-1.5.xsd">
-<gfe:cache id="rabbitMQQache"/>
+  <gfe:cache-server id="rabbitmq-server" auto-startup="true" cache-ref="cacheFactoryBean"
+       bind-address="localhost" port="10334" host-name-for-clients="localhost">
+       
+   </gfe:cache-server>
+
 <gfe-data:repositories base-package="com.rmqclustermgr.model.persistence.repository"/>
+<gfe:partitioned-region id="cluster" cache-ref="cacheFactoryBean" key-constraint="com.rmqclustermgr.model.persistence.ClusterKey" value-constraint="com.rmqclustermgr.model.persistence.Cluster"/>
+<gfe:partitioned-region id="exchange" cache-ref="cacheFactoryBean" key-constraint="com.rmqclustermgr.model.persistence.ExchangeKey" value-constraint="com.rmqclustermgr.model.persistence.Exchange"/>
+<gfe:partitioned-region id="federationUpstream" cache-ref="cacheFactoryBean" key-constraint="com.rmqclustermgr.model.persistence.FederationUpstreamKey" value-constraint="com.rmqclustermgr.model.persistence.FederationUpstream"/>
+<gfe:partitioned-region id="node" cache-ref="cacheFactoryBean" key-constraint="com.rmqclustermgr.model.persistence.NodeKey" value-constraint="com.rmqclustermgr.model.persistence.Node"/>
+<gfe:partitioned-region id="policy" cache-ref="cacheFactoryBean" key-constraint="com.rmqclustermgr.model.persistence.PolicyKey" value-constraint="com.rmqclustermgr.model.persistence.Policy"/>
+<gfe:partitioned-region id="project" cache-ref="cacheFactoryBean" key-constraint="com.rmqclustermgr.model.persistence.ProjectKey" value-constraint="com.rmqclustermgr.model.persistence.Project"/>
+<gfe:partitioned-region id="queue" cache-ref="cacheFactoryBean" key-constraint="com.rmqclustermgr.model.persistence.QueueKey" value-constraint="com.rmqclustermgr.model.persistence.Queue"/>
+<gfe:partitioned-region id="queueBinding" cache-ref="cacheFactoryBean" key-constraint="com.rmqclustermgr.model.persistence.QueueBindingKey" value-constraint="com.rmqclustermgr.model.persistence.QueueBindingKey"/>
+<gfe:partitioned-region id="user" cache-ref="cacheFactoryBean" key-constraint="com.rmqclustermgr.model.persistence.UserKey" value-constraint="com.rmqclustermgr.model.persistence.User"/>
+<gfe:partitioned-region id="vhost" cache-ref="cacheFactoryBean" key-constraint="com.rmqclustermgr.model.persistence.VhostKey" value-constraint="com.rmqclustermgr.model.persistence.Vhost"/>
+
+
 
 </beans>

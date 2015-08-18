@@ -1,13 +1,13 @@
 package com.rmqclustermgr.controller;
 
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 /**
  * Controller
  * @author joshuadavis
  *
  */
-@RestController
+@Controller
 @RequestMapping("/main")
 public class MainController {
 /**

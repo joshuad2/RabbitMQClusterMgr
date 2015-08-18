@@ -5,7 +5,7 @@ import java.io.Serializable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.gemfire.mapping.Region;
 
-@Region("rabbitmqPolicy")
+@Region("policy")
 public class Policy implements Serializable {
 
 	/**
